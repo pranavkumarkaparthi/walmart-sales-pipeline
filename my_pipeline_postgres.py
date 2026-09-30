@@ -13,7 +13,7 @@ logger = logging.getLogger("walmart_pipeline")
 
 # EXTRACT: read the messy CSV
 df = pd.read_csv("/Users/pranavkumarkaparthi/Desktop/Practice Datasets/walmart_pipeline/data/raw/Walmart_Sales_Messy.csv")
-logger.info("Loaded messy data:", df.shape)
+logger.info(f"Loaded messy data: {df.shape}")
 
 # TRANSFORM: clean it, one fix at a time
 df["Store"] = df["Store"].astype(str).str.strip()
@@ -25,7 +25,7 @@ df = df[df["Weekly_Sales"] >= 0]
 df["Date"] = pd.to_datetime(df["Date"], format="mixed", dayfirst=True)
 df["Date"] = df["Date"].dt.strftime("%Y-%m-%d")
 df = df.drop_duplicates()
-logger.info("Cleaned data:", df.shape)
+logger.info(f"Cleaned data: {df.shape}")
 
 
 # SAVE: write the clean data to its own file (raw stays untouched)
@@ -50,7 +50,7 @@ logger.info("Saved walmart_clean.csv")
 # LOAD: push into the SQLite database
 engine = create_engine("postgresql+psycopg2://pranavkumarkaparthi@localhost/walmart")
 df.to_sql("weekly_sales", engine, if_exists="replace", index=False)
-logger.info("Loaded to database:", len(df), "rows")
+logger.info(f"Loaded to database:  {len(df)}, rows")
 
 
 
